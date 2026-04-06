@@ -23,22 +23,44 @@ Stack: MongoDB, Express, React (Vite), Node.js, Tailwind CSS, JWT, Nodemailer OT
 ## Project Structure
 
 ```text
-attendance-app/
+attendEase/
 |-- backend/
-|   |-- middleware/     JWT auth middleware
-|   |-- models/         User, Class, Attendance schemas
-|   |-- routes/         auth, classes, attendance
-|   |-- .env.example
+|   |-- middleware/
+|   |   `-- auth.js          JWT auth middleware
+|   |-- models/
+|   |   |-- Attendance.js
+|   |   |-- Class.js
+|   |   `-- User.js
+|   |-- routes/
+|   |   |-- attendance.js
+|   |   |-- auth.js
+|   |   `-- classes.js
 |   |-- package.json
+|   |-- package-lock.json
 |   `-- server.js
 `-- frontend/
     |-- src/
-    |   |-- components/ Navbar
-    |   |-- context/    AuthContext
-    |   |-- pages/      Login, Dashboard, Class, Attendance, Analytics
-    |   `-- utils/      Axios API client
+    |   |-- components/
+    |   |   `-- Navbar.jsx
+    |   |-- context/
+    |   |   `-- AuthContext.jsx
+    |   |-- pages/
+    |   |   |-- AnalyticsPage.jsx
+    |   |   |-- AttendancePage.jsx
+    |   |   |-- ClassPage.jsx
+    |   |   |-- DashboardPage.jsx
+    |   |   `-- LoginPage.jsx
+    |   |-- utils/
+    |   |   `-- api.js
+    |   |-- App.jsx
+    |   |-- index.css
+    |   `-- main.jsx
     |-- index.html
-    `-- package.json
+    |-- package.json
+    |-- package-lock.json
+    |-- postcss.config.js
+    |-- tailwind.config.js
+    `-- vite.config.js
 ```
 
 ---
