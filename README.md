@@ -84,7 +84,7 @@ Create `.env` from `.env.example`:
 
 ```env
 PORT=5000
-MONGO_URI=mongodb://localhost:27017/attendease
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.yevj08r.mongodb.net/?appName=Cluster0
 JWT_SECRET=your_super_secret_jwt_key
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_gmail_app_password
