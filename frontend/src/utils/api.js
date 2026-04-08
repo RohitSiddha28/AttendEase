@@ -15,6 +15,12 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' }
 });
 
+const getCurrentRoute = () => {
+  if (typeof window === 'undefined') return '/';
+  const hashRoute = window.location.hash.replace(/^#/, '');
+  return hashRoute || window.location.pathname || '/';
+};
+
 api.interceptors.request.use(config => {
   const token = sessionStorage.getItem('token');
   if (token) config.headers.Authorization = `Bearer ${token}`;
@@ -25,12 +31,12 @@ api.interceptors.response.use(
   res => res,
   err => {
     const token = sessionStorage.getItem('token');
-    const isLoginPage = window.location.pathname === '/login';
+    const isLoginPage = getCurrentRoute() === '/login';
 
     if (err.response?.status === 401 && token && !isLoginPage) {
       sessionStorage.removeItem('token');
       sessionStorage.removeItem('user');
-      window.location.href = '/login';
+      window.location.hash = '/login';
     }
     return Promise.reject(err);
   }

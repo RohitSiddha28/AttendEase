@@ -46,14 +46,6 @@ const sendRegistrationOtp = async ({ email, name, otp }) => {
   });
 };
 
-const sendRegistrationOtpWithTimeout = ({ email, name, otp }) =>
-  Promise.race([
-    sendRegistrationOtp({ email, name, otp }),
-    new Promise((_, reject) => {
-      setTimeout(() => reject(new Error('OTP email request timed out')), 15000);
-    })
-  ]);
-
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
   try {
@@ -93,19 +85,15 @@ router.post('/register', async (req, res) => {
     }
 
     await user.save();
-    try {
-      await sendRegistrationOtpWithTimeout({ email: normalizedEmail, name: trimmedName, otp });
-    } catch (emailError) {
-      console.error('OTP email error:', emailError);
-      return res.status(502).json({
-        error: 'Could not send OTP email right now. Please try again in a moment.'
-      });
-    }
-
     res.status(201).json({
-      message: 'OTP sent successfully. Verify to complete registration.',
+      message: 'Registration details saved. OTP is on its way.',
       email: normalizedEmail
     });
+
+    sendRegistrationOtp({ email: normalizedEmail, name: trimmedName, otp })
+      .catch(emailError => {
+        console.error('OTP email error:', emailError);
+      });
   } catch (err) {
     console.error('Register error:', err);
     res.status(500).json({ error: 'Registration failed' });

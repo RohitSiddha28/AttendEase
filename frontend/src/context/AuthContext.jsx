@@ -9,10 +9,15 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const [token, setToken] = useState(() => sessionStorage.getItem('token'));
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    const hasToken = Boolean(sessionStorage.getItem('token'));
+    const hasUser = Boolean(sessionStorage.getItem('user'));
+    return hasToken && !hasUser;
+  });
 
   useEffect(() => {
-    if (token) {
+    if (token && !user) {
+      setLoading(true);
       api.get('/auth/me')
         .then(res => {
           setUser(res.data.user);
@@ -30,13 +35,14 @@ export const AuthProvider = ({ children }) => {
     } else {
       setLoading(false);
     }
-  }, [token]);
+  }, [token, user]);
 
   const login = (tokenVal, userData) => {
     sessionStorage.setItem('token', tokenVal);
     sessionStorage.setItem('user', JSON.stringify(userData));
     setToken(tokenVal);
     setUser(userData);
+    setLoading(false);
   };
 
   const logout = () => {
@@ -44,6 +50,7 @@ export const AuthProvider = ({ children }) => {
     sessionStorage.removeItem('user');
     setToken(null);
     setUser(null);
+    setLoading(false);
   };
 
   return (

@@ -20,6 +20,12 @@ Stack: MongoDB, Express, React (Vite), Node.js, Tailwind CSS, JWT, Nodemailer OT
 
 ---
 
+## Future Goals
+
+- Add a professional forgot-password flow on the login page, including secure email-based password reset support.
+
+---
+
 ## Project Structure
 
 ```text
