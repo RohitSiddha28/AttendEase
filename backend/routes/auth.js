@@ -8,6 +8,9 @@ const router = express.Router();
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -42,6 +45,14 @@ const sendRegistrationOtp = async ({ email, name, otp }) => {
     `
   });
 };
+
+const sendRegistrationOtpWithTimeout = ({ email, name, otp }) =>
+  Promise.race([
+    sendRegistrationOtp({ email, name, otp }),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('OTP email request timed out')), 15000);
+    })
+  ]);
 
 // POST /api/auth/register
 router.post('/register', async (req, res) => {
@@ -82,7 +93,14 @@ router.post('/register', async (req, res) => {
     }
 
     await user.save();
-    await sendRegistrationOtp({ email: normalizedEmail, name: trimmedName, otp });
+    try {
+      await sendRegistrationOtpWithTimeout({ email: normalizedEmail, name: trimmedName, otp });
+    } catch (emailError) {
+      console.error('OTP email error:', emailError);
+      return res.status(502).json({
+        error: 'Could not send OTP email right now. Please try again in a moment.'
+      });
+    }
 
     res.status(201).json({
       message: 'OTP sent successfully. Verify to complete registration.',

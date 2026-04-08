@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://attendease-9xru.onrender.com',
+        target: 'http://localhost:5000',
         changeOrigin: true
       }
     }

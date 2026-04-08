@@ -88,13 +88,13 @@ MONGO_URI=mongodb+srv://<username>:<password>@cluster0.yevj08r.mongodb.net/?appN
 JWT_SECRET=your_super_secret_jwt_key
 EMAIL_USER=your_email@gmail.com
 EMAIL_PASS=your_gmail_app_password
-CLIENT_URL=http://localhost:5173
+CLIENT_URLS=https://attendease-frontend.onrender.com,http://localhost:5173
 ```
 
 Notes:
 
 - `EMAIL_USER` and `EMAIL_PASS` are required for registration OTP emails.
-- `CLIENT_URL` should match your frontend dev URL.
+- `CLIENT_URLS` should include every allowed frontend origin, including your deployed frontend and local dev URL.
 - If you use MongoDB Atlas, replace `MONGO_URI` with your Atlas connection string.
 
 Start the backend:
@@ -120,6 +120,8 @@ npm run dev
 ```
 
 Frontend runs on `http://localhost:5173` by default.
+
+For production deployment, set `VITE_API_URL=https://attendease-9xru.onrender.com/api` in the frontend service if you want to make the API target explicit. The frontend code also falls back to the Render backend automatically outside localhost.
 
 ---
 
