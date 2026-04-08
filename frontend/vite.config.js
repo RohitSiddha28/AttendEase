@@ -6,7 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://attendease-backend-b4sf.onrender.com',
+        target: 'https://attendease-9xru.onrender.com',
         changeOrigin: true
       }
     }
